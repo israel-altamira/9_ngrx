@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+
+<body>
+    <p id="para">Si este texto cambia de color, entonces el llamado a las funciones javascript esta funcionando OK.</p>
+    <button onclick="javascript:changeColor('blue');">Azul</button>
+    <button onclick="javascript:changeColor('red');">Rojo</button>
+
+    <br>
+    <br>
+    <div>Para esta leccion se uso :</div>
+    <div>https://developer.mozilla.org/es/docs/Web/API/Document/getElementById </div>
+    <div>https://developer.mozilla.org/es/docs/Web/API/WindowTimers/clearTimeout </div><br>
+
+    <div id="cajadecolor" style="width: 500px; height: 200px; background: limegreen">
+        <div>Este es el inicio</div>
+    </div>
+</body>
+
+
+<script>
+
+    var cajadecolor = document.getElementById("cajadecolor");
+
+    var alarm = {
+        echo: function (msg) {
+            console.log('echo: ' + msg);
+            cajadecolor.innerHTML = cajadecolor.innerText + '<br/><div>' + msg + '</div>';
+        },
+        remind: function (aMessage) {
+            cajadecolor.style.background = 'red';
+            this.echo('Desperto el timeout. Repartidor entrego la pizza: ' + this.timeoutID);
+            delete this.timeoutID;
+        },
+        canceling: function () {
+            if (typeof this.timeoutID == "number") {
+                this.echo('Se Interrumpio la orden de pizza!! ' + this.timeoutID);
+                window.clearTimeout(this.timeoutID);
+                delete this.timeoutID;
+            }
+        },
+        setup: function () {
+            var self = this;
+            self.canceling();
+            cajadecolor.style.background = 'limegreen';
+            this.timeoutID = window.setTimeout(function (msg) {self.remind(msg);}, 1000, "Wake up!");
+            self.echo('Se hizo nueva orden de pizza: ' + this.timeoutID);
+        }
+    };
+
+    window.onclick = function () {
+        alarm.echo('mandando llamar el window.onclik');
+        alarm.setup();
+    };
+
+    function changeColor(newColor) {
+        var elem = document.getElementById('para');
+        elem.style.color = newColor;
+    }
+</script>
+
+
+</html>
